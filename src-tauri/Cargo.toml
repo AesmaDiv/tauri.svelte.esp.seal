@@ -1,0 +1,29 @@
+[package]
+name = "tauri-svelte-esp-seal"
+version = "0.0.0"
+description = "A Tauri App"
+authors = ["you"]
+license = ""
+repository = ""
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[build-dependencies]
+tauri-build = { version = "1.2", features = [] }
+
+[dependencies]
+tauri = { version = "1.2", features = ["dialog-message", "shell-open"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+rand = "^0.8.5"
+rusqlite =        { version = "^0.27.0", features = ["bundled"] }
+rusqlite_helper = { path = "./rusqlite_helper"}
+adam =            { path = "./adam"}
+encoding_rs =     { version = "^0.8.31" }
+encoding_rs_io =  { version = "^0.1.7" }
+
+[features]
+# this feature is used for production builds or when `devPath` points to the filesystem
+# DO NOT REMOVE!!
+custom-protocol = ["tauri/custom-protocol"]
