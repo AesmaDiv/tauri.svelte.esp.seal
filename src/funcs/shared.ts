@@ -84,3 +84,17 @@ export function extract(obj, keyPath) {
   }
   return obj;
 }
+export function printProtocol() {
+  let protocol = document.getElementById("Protocol");
+  let style = "";
+  window.document.querySelectorAll('style').forEach(item => {
+    if(item.getAttribute('data-vite-dev-id').includes('Protocol')) style += item.innerText;
+    if(item.getAttribute('data-vite-dev-id').includes('TestChart')) style += item.innerText;
+    if(item.getAttribute('data-vite-dev-id').includes('Chart')) style += item.innerText;
+  });
+  let wnd = window.open("","","height=600pt, width=800pt");
+  wnd.document.write(`<html><head><style>${style}</style><head>`);
+  wnd.document.write(`<body>${protocol.innerHTML}</boby></html>`);
+  wnd.document.close();
+  wnd.print()
+}

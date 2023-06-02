@@ -16,7 +16,7 @@
 </script>
 
 
-<div class="root">
+<div class="root" style={$$props.style}>
   <div class="info">
     {#each fields as item}
       <TextBox name={item.name} title={item.label} value={$ADAM_DATA[item.name]?.toFixed(item.fixed || 0) || 0}/>

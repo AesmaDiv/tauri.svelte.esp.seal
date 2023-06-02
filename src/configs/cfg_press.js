@@ -20,6 +20,6 @@ export const LIMITS = {
 /** Максимальные значения по оси Y */
 export const AXIES = {
   time: { minimum: 0, maximum: 180, ticks: 6, },
-  top:  { minimum: 0, maximum: 2.5, ticks: 5, },
-  btm:  { minimum: 0, maximum: 3.5, ticks: 7, },
+  press_top:  { minimum: 0, maximum: 2.5, ticks: 5, },
+  press_btm:  { minimum: 0, maximum: 3.5, ticks: 7, },
 };

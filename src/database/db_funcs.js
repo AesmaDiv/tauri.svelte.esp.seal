@@ -101,3 +101,15 @@ const _bytesToFloats = (rawdata) => {
 
   return result;
 }
+
+export function pointsToChart(source, name1, name2) {
+  let initial = { [name1]: [], [name2]: [] };
+  if (!source) return initial;
+
+  let points = source.reduce((obj, val) => {
+    obj[name1].push({x: val.time, y: val[name1]});
+    obj[name2].push({x: val.time, y: val[name2]});
+    return obj;
+  }, initial);
+  return points;
+}

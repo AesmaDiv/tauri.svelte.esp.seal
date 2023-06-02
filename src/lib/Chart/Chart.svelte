@@ -69,8 +69,10 @@
       </g>
     {/if}
     <!-- marker -->
+    {#if marker}
     <path transform="translate(0,{height - marker.y * dy.coef})" d="M 0,0 l -5,5 v -10 z"/>
     <path transform="translate({marker.x * dx.coef},{height})" d="M 0,0 l 5,5 h -10 z"/>
+    {/if}
     <svg style="overflow: hidden" {width} {height}>
       {#if marker}
       <path transform="translate({marker.x * dx.coef},{height - marker.y * dy.coef})"

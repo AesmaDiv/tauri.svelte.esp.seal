@@ -18,6 +18,7 @@ export type PowerPoint = {
   time: number,
   power: number,
   temper: number,
+  thrust?: number,
 }
 export let POINTS_PRESS: Writable<PressPoint[]> = writable([]);
 export let POINTS_POWER: Writable<PowerPoint[]> = writable([]);

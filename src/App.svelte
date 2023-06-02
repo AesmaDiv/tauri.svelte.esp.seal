@@ -1,11 +1,14 @@
 <script lang="ts">
+  import { readTestList, readRecord, readSealtypes } from "./stores/database";
+  import { printProtocol } from "./funcs/shared";
   import { onMount } from "svelte";
   import TableList from "./lib/TableList.svelte";
   import Slider from "./lib/Components/Slider.svelte";
   import RecordInfo from "./lib/RecordInfo.svelte";
-  import { readTestList, readRecord, readSealtypes } from "./stores/database";
   import TestPress from "./lib/TestPress.svelte";
   import TestPower from "./lib/TestPower.svelte";
+  import Protocol from "./lib/Protocol.svelte";
+
 
   onMount(async () => {
     await readTestList();
@@ -22,6 +25,7 @@
 
   const onSelect = async (row: Object) => await readRecord(parseInt(row['id']) || 0);
   const style = "box-shadow: 2px 2px 15px gray;";
+
 </script>
 
 <main class="container">
@@ -36,6 +40,9 @@
       </Slider>
       <Slider title="Измерение потребляемой мощности :" bind:group={slider_group} {style}>
         <div class="slider-content"><TestPower /></div>
+      </Slider>
+      <Slider title="Протокол :" bind:group={slider_group} {style}>
+        <div class="slider-content"><button on:mousedown={printProtocol}>Print</button><Protocol/></div>
       </Slider>
     </div>
   </div>
