@@ -18,7 +18,7 @@
 
 <div class="root" style="{ROOT_STYLE}">
   <div class="inner">
-  <table>
+  <table class="table-list">
     <thead>
       {#if $$props.bindings }
         {#each Object.entries($$props.bindings) as [key, value]}
@@ -67,35 +67,35 @@
     background-color: var(--color-hover);
     z-index: 3;
   }
-  table {
+  .table-list {
     width: 100%;
     border-collapse: collapse;
   }
-  thead {
+  .table-list thead {
     background-color: var(--color-main);
     position: sticky;
     top: 0;
     text-align: left;
   }
-  tr {
+  .table-list tr {
     background-color: var(--color-main);
     border-bottom: 1px solid var(--color-border);
 
     transition: background-color 250ms;
   }
-  tr:hover {
+  .table-list tr:hover {
     background-color: var(--color-hover);
   }
-  tr.selected {
+  .table-list tr.selected {
     background-color: var(--color-select);
   }
-  th {
+  .table-list th {
     padding-top: 0.5em;
     padding-bottom: 0.5em;
     padding-left: 0.5em;
     outline: 1px solid var(--color-border);
   }
-  td {
+  .table-list td {
     padding-top: 0.3em;
     padding-bottom: 0.3em;
     padding-left: 0.5em;

@@ -45,36 +45,6 @@
     oil_shavs   = cmbVal('presence',    record['oil_shavs']);
     oil_color   = eng  ?  'Amber'   :   record['oil_color'];
   });
-
-
-  const buildPointsTable = (points_power: PowerPoint[], headers) => {
-    let rows = "";
-    const points_count = Math.min(points_power.length, POINTS_MAX)
-    for (let i = 0; i < points_count; i++) {
-      rows+=`<tr key='test_table_row_${i}}'>
-        <th scope="row">${i + 1}</th>
-        <td>${roundValue(points_power[i].thrust, 3) || "-.-"}</td>
-        <td>${roundValue(points_power[i].power, 3)}</td>
-        <td>${roundValue(points_power[i].temper, 1)}</td>
-        <td>${decimal2time(points_power[i].time)}</td>
-      </tr>`;
-    }
-    let result = `<table>
-      <thead>
-        <tr>
-          <th scope="col">№</th>
-          <th scope="col">${headers.table_axial}</th>
-          <th scope="col">${headers.table_power}</th>
-          <th scope="col">${headers.table_temp}</th>
-          <th scope="col">${headers.table_time}</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${rows}
-      </tbody>
-    </table>`;
-    return result;
-  }
 </script>
 
 <div id="Protocol" class="protocol">
@@ -195,7 +165,29 @@
         <TestChart style="height: 120px;" axies={press_axies} points={$POINTS_PRESS} names={press_names}/>
       </div>
       <div class="test_table">
-        {@html buildPointsTable(points, headers)}
+        <!-- {@html buildPointsTable(points, headers)} -->
+        <table class="table_power">
+          <thead>
+            <tr>
+              <th scope="col">№</th>
+              <th scope="col">{headers.table_axial}</th>
+              <th scope="col">{headers.table_power}</th>
+              <th scope="col">{headers.table_temp}</th>
+              <th scope="col">{headers.table_time}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {#each points as pnt, i}
+            <tr>
+              <th scope="row">{i + 1}</th>
+              <td>{roundValue(pnt.thrust, 3) || "-.-"}</td>
+              <td>{roundValue(pnt.power, 3)}</td>
+              <td>{roundValue(pnt.temper, 1)}</td>
+              <td>{decimal2time(pnt.time)}</td>
+            </tr>
+            {/each}
+          </tbody>
+        </table>
       </div>
       <p style="align-self: left;">{headers.note}</p>
     </main>
@@ -310,12 +302,12 @@ main p {
   grid-template-columns: 30% 20% 30% 10% 10%;
   grid-template-rows: repeat(9, auto);
 }
-.test_results {
+/* .test_results {
   width: 100%;
   height: 600px;
   display: flex;
   flex-direction: row;
-}
+} */
 .test_charts {
   display: grid;
   grid-template-columns: 50% 50%;
@@ -323,22 +315,23 @@ main p {
   height: 300px;
 }
 .test_table {
+  margin-top: 1em;
   padding: 1em;
   width: 50%;
 }
-.test_table table {
+.table_power {
   width: 100%;
   height: auto;
-  border: 2px solid black;
   border-collapse: collapse;
   text-align: center;
+  font-size: inherit;
 }
-.test_table th,
-.test_table tr, 
-.test_table td {
+.table_power th,
+.table_power tr, 
+.table_power td {
   border: 1px solid grey;
 }
-.graph_container {
+/* .graph_container {
   width: 100%;
   height: 40%;
   display: flex;
@@ -368,7 +361,7 @@ main p {
   display: flex;
   justify-content: space-between;
   margin-top: 5px;
-}
+} */
 /* ОСНОВАНИЕ */
 footer {
   width: 100%;

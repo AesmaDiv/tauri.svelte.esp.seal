@@ -86,7 +86,7 @@ export function extract(obj, keyPath) {
 }
 export function printProtocol() {
   let protocol = document.getElementById("Protocol");
-  let style = "";
+  let style = window.document.querySelector('style').innerHTML;
   window.document.querySelectorAll('style').forEach(item => {
     if(item.getAttribute('data-vite-dev-id').includes('Protocol')) style += item.innerText;
     if(item.getAttribute('data-vite-dev-id').includes('TestChart')) style += item.innerText;
