@@ -16,6 +16,6 @@ export const DATANAMES = [
 /** Пределы допуска для измерения потребляемой мощности */
 export const AXIES = {
   time:   { minimum: 0, maximum: 25,  ticks: 5, },
-  power:  { minimum: 0, maximum: 0.6, ticks: 6, fixed: 1 },
+  power:  { minimum: 0, maximum: 0.6, ticks: 6, round: 1 },
   temper: { minimum: 0, maximum: 150, ticks: 5, },
 }

@@ -4,14 +4,16 @@
   import { TestStates, MARKER_POWER, POINTS_POWER as NewPoints } from "../stores/equipment";
   import { POINTS_POWER as OldPoints } from "../stores/database";
   import { DATANAMES, AXIES } from "../configs/cfg_power";
+  import { HEADERS_CHARTS } from "../configs/cfg_localization";
 
-
+  const eng = false;
   const names = {x: 'time', y1: 'power', y2: 'temper'};
+  const titles = HEADERS_CHARTS[eng].power;
 </script>
 
 <div class="root">
   <TestControls state={TestStates.POWER} fields={DATANAMES} style="width: 300px;"/>
-  <TestChart axies={AXIES} points={$NewPoints || $OldPoints} {names} markers={$MARKER_POWER}/>
+  <TestChart {titles} axies={AXIES} points={$NewPoints || $OldPoints} {names} markers={$MARKER_POWER}/>
 </div>
 
 <style>

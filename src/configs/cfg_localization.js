@@ -152,6 +152,17 @@ export const HEADERS_PRESS = {
     axis_y:   'pressure, kgf/sm²',
   }
 }
+export const HEADERS_CHARTS = {
+  false: {
+    press: ['График давления верхней диафрагмы', 'График давления нижней диафрагмы'],
+    power: ['График потребляемой мощности', 'График изменения температуры масла'],
+  },
+  true: {
+    press: ['Top diaphragm pressure chart', 'Bottom diaphragm pressure chart'],
+    power: ['Power consumption chart', 'Oil temperature curve'],
+
+  }
+}
 
 export const COMBOS = {
   false: {
@@ -190,5 +201,4 @@ export const COMBOS = {
       { id: 2, name: 'Left' }
     ],
   },
-
 }

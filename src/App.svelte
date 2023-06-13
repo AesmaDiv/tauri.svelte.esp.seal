@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { readTestList, readRecord, readSealtypes } from "./stores/database";
+  import { readSettings } from "./stores/settings";
   import { printProtocol } from "./funcs/shared";
   import { onMount } from "svelte";
   import TableList from "./lib/TableList.svelte";
@@ -8,12 +8,10 @@
   import TestPress from "./lib/TestPress.svelte";
   import TestPower from "./lib/TestPower.svelte";
   import Protocol from "./lib/Protocol.svelte";
+  import AppHeader from "./lib/AppHeader.svelte";
 
 
-  onMount(async () => {
-    await readTestList();
-    await readSealtypes();
-  });
+  onMount(async () => await readSettings());
 
   let bindings = {
     id: '№',
@@ -23,45 +21,64 @@
   }
   let slider_group = 'Данные об объекте испытания :';
 
-  const onSelect = async (row: Object) => await readRecord(parseInt(row['id']) || 0);
   const style = "box-shadow: 2px 2px 15px gray;";
 
 </script>
 
-<main class="container">
-  <div class="root">
-    <TableList width='600px' height='98vh' style={style} {bindings} {onSelect}/>
-    <div class="sliders">
-      <Slider title="Данные об объекте испытания :" bind:group={slider_group} {style}>
-        <div class="slider-content"><RecordInfo /></div>
-      </Slider>
-      <Slider title="Измерение давления диафрагм :" bind:group={slider_group} {style}>
-        <div class="slider-content"><TestPress /></div>
-      </Slider>
-      <Slider title="Измерение потребляемой мощности :" bind:group={slider_group} {style}>
-        <div class="slider-content"><TestPower /></div>
-      </Slider>
-      <Slider title="Протокол :" bind:group={slider_group} {style}>
-        <div class="slider-content"><button on:mousedown={printProtocol}>Print</button><Protocol/></div>
-      </Slider>
-    </div>
+<main class="root">
+  <div class="header">
+    <AppHeader {style}/>
+  </div>
+  <div class="testlist">
+    <TableList style={style} {bindings}/>
+  </div>
+  <div class="sliders">
+    <Slider title="Данные об объекте испытания :" bind:group={slider_group} {style}>
+      <div class="slider-content"><RecordInfo /></div>
+    </Slider>
+    <Slider title="Измерение давления диафрагм :" bind:group={slider_group} {style}>
+      <div class="slider-content"><TestPress /></div>
+    </Slider>
+    <Slider title="Измерение потребляемой мощности :" bind:group={slider_group} {style}>
+      <div class="slider-content"><TestPower /></div>
+    </Slider>
+    <Slider title="Протокол :" bind:group={slider_group} {style}>
+      <div class="slider-content protocol"><button on:mousedown={printProtocol}>Print</button><Protocol/></div>
+    </Slider>
   </div>
 </main>
 
 <style>
   .root {
-    display: flex;
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: 25em calc(100% - 25.5em);
+    grid-template-rows: 3em calc(100% - 3.5em);
     gap: 0.5em;
+    width: 100%;
+    height: calc(100vh - 1.5em);
+  }
+  .header {
+    grid-row: 1;
+    grid-column-start: 1;
+    grid-column-end: 3;
+  }
+  .testlist {
+    grid-row: 2;
+    grid-column: 1;
   }
   .sliders {
-    width: 100%;
+    grid-row: 2;
+    grid-column: 2;
     display: flex;
     flex-direction: column;
     gap: 0.5em;
+    /* overflow: hidden; */
   }
   .slider-content {
     height: 560px;
     background-color: white;
+  }
+  .protocol {
+    outline: 1px solid black;
   }
 </style>

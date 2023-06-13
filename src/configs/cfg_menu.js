@@ -23,9 +23,9 @@ export const ANALOG = {
   COLUMNS: [
     { name: 'slot',    label: 'слот',    parse_func: parseInt },
     { name: 'channel', label: 'канал',   parse_func: parseInt },
-    { name: 'd_range', label: 'ц.диап.', parse_func: parseInt },
-    { name: 'offset',  label: 'ц.смещ.', parse_func: parseInt },
-    { name: 'v_range', label: 'з.диап.', parse_func: parseFloat },
+    { name: 'd_range', label: 'цифр.диап.', parse_func: parseInt },
+    { name: 'offset',  label: 'цифр.смещ.', parse_func: parseInt },
+    { name: 'v_range', label: 'диап.знач.', parse_func: parseFloat },
     { name: 'coeff',   label: 'коэфф.' , parse_func: parseFloat },
   ],
 };

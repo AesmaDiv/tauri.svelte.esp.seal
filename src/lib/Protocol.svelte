@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { RECORD, CURRENT_SEALTYPE, POINTS_POWER, POINTS_PRESS, type PowerPoint } from "../stores/database";
+  import { RECORD, CURRENT_SEALTYPE, POINTS_POWER, POINTS_PRESS, LIMITS_PRESS } from "../stores/database";
   import { AXIES as press_axies } from "../configs/cfg_press";
   import { AXIES as power_axies, POINTS_MAX } from "../configs/cfg_power";
 
-  import { HEADERS_PROTOCOL, COMBOS, transliterate } from "../configs/cfg_localization";
+  import { HEADERS_PROTOCOL, HEADERS_CHARTS, COMBOS, transliterate } from "../configs/cfg_localization";
   import { roundValue, decimal2time } from "../funcs/shared";
   import Logo from "./Logo.svelte";
   import TestChart from "./TestChart.svelte";
@@ -23,6 +23,7 @@
   let [record, sealtype, points] = [{}, {}, []]
 
   const headers = HEADERS_PROTOCOL[eng]
+  const chart_titles = HEADERS_CHARTS[eng];
   const press_names = {x: 'time', y1: 'press_top', y2: 'press_btm'};
   const power_names = {x: 'time', y1: 'power', y2: 'temper'};
 
@@ -161,8 +162,8 @@
       <p>{headers.title_result}</p>
       <hr/>
       <div class="test_charts">
-        <TestChart style="height: 120px;" axies={power_axies} points={$POINTS_POWER} names={power_names}/>
-        <TestChart style="height: 120px;" axies={press_axies} points={$POINTS_PRESS} names={press_names}/>
+        <TestChart titles={chart_titles.power} axies={power_axies} points={$POINTS_POWER} names={power_names}/>
+        <TestChart titles={chart_titles.press} axies={press_axies} limits={$LIMITS_PRESS} points={$POINTS_PRESS} names={press_names}/>
       </div>
       <div class="test_table">
         <!-- {@html buildPointsTable(points, headers)} -->
@@ -178,6 +179,7 @@
           </thead>
           <tbody>
             {#each points as pnt, i}
+            {#if i < 20}
             <tr>
               <th scope="row">{i + 1}</th>
               <td>{roundValue(pnt.thrust, 3) || "-.-"}</td>
@@ -185,6 +187,7 @@
               <td>{roundValue(pnt.temper, 1)}</td>
               <td>{decimal2time(pnt.time)}</td>
             </tr>
+            {/if}
             {/each}
           </tbody>
         </table>
@@ -309,10 +312,11 @@ main p {
   flex-direction: row;
 } */
 .test_charts {
-  display: grid;
-  grid-template-columns: 50% 50%;
-  width: 100%;
-  height: 300px;
+  display: flex;
+  flex-direction: row;
+  /* width: 100%; */
+  margin: 0 10px;
+  height: 200px;
 }
 .test_table {
   margin-top: 1em;

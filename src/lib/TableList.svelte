@@ -1,16 +1,16 @@
 <script lang="ts">
-  import { TESTLIST } from "../stores/database";
+  import { TESTLIST, readRecord } from "../stores/database";
 
   let current = 0;
   const ROOT_STYLE = `${$$props.style} width: ${$$props.width}; height: ${$$props.height};`
 
-  function onClick(event) {
+  async function onClick(event) {
     let row: HTMLTableRowElement = <HTMLTableRowElement>event.target.parentElement;
     if (current === (current = parseInt(row.id) || 0)) return;
     let obj: Object = [...row.children].reduce((accum, current) => {
       return {...accum, [current.id]: current.innerHTML}
     }, {});
-    $$props.onSelect && $$props.onSelect(obj);
+    await readRecord(parseInt(obj['id']) || 0)
   }
 
   const hide = (key: string) => key === 'id' ? 'display: none' : '';
@@ -49,6 +49,8 @@
     --color-border: rgb(220,220,220);
     overflow: hidden;
     border-radius: 0.5em;
+    width: 100%;
+    height: 100%;
   }
   .inner {
     overflow-x: hidden;

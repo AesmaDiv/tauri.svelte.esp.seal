@@ -2,6 +2,16 @@ export type Point = {
   x: number,
   y: number,
 };
+export type AxisInfo = {
+  minimum : number,
+  maximum : number,
+  ticks   : number,
+  round?  : number,
+};
+export type Limits = {
+  lo : number,
+  hi : number
+};
 // Render the svg <path> element 
 // I:  - points (array): points coordinates
 //     - command (function)

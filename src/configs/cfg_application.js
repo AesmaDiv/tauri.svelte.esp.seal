@@ -1,23 +1,3 @@
-// import { colors } from '@mui/material';
-
-
-/** Палитра используемых цветов */
-// export const COLORS = {
-//   primary: colors.blue[700],
-//   // background_app: colors.grey[900],
-//   // background_form: colors.grey[800],
-//   background_app: colors.blue[100],
-//   background_form: colors.blue[50],
-//   font_app: colors.grey[900],
-//   font_input: colors.amber[600],
-//   background_menu: colors.blue[800],
-//   chart_press_top: colors.blue[400],
-//   chart_press_btm: colors.green[400],
-//   chart_press_lmt: colors.yellow[200],
-//   chart_power_pwr: colors.red[400],
-//   chart_power_tmp: colors.green[800],
-//   chart_power_lmt: colors.green[100],
-// }
 /** НАСТРОЙКИ ПРИЛОЖЕНИЯ */
 export const CONFIG = {
   db: {
