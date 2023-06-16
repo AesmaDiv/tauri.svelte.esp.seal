@@ -4,7 +4,7 @@
   import { onMount } from "svelte";
   import TableList from "./lib/TableList.svelte";
   import Slider from "./lib/Components/Slider.svelte";
-  import RecordInfo from "./lib/RecordInfo.svelte";
+  import RecordInfo from "./lib/Record.svelte";
   import TestPress from "./lib/TestPress.svelte";
   import TestPower from "./lib/TestPower.svelte";
   import Protocol from "./lib/Protocol.svelte";
@@ -43,7 +43,7 @@
       <div class="slider-content"><TestPower /></div>
     </Slider>
     <Slider title="Протокол :" bind:group={slider_group} {style}>
-      <div class="slider-content protocol"><button on:mousedown={printProtocol}>Print</button><Protocol/></div>
+      <div class="slider-content protocol"><button style="width: 200px;" on:mousedown={printProtocol}>Print</button><Protocol/></div>
     </Slider>
   </div>
 </main>
@@ -79,6 +79,10 @@
     background-color: white;
   }
   .protocol {
+    display: flex;
+    flex-direction: column;
     outline: 1px solid black;
+    overflow-y: scroll;
+    width: auto;
   }
 </style>

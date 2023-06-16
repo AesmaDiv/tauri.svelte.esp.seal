@@ -5,7 +5,7 @@
 
   import { HEADERS_PROTOCOL, HEADERS_CHARTS, COMBOS, transliterate } from "../configs/cfg_localization";
   import { roundValue, decimal2time } from "../funcs/shared";
-  import Logo from "./Logo.svelte";
+  import Logo from "./svg/SVGLogo.svelte";
   import TestChart from "./TestChart.svelte";
 
 
@@ -216,14 +216,14 @@
 
 <style>
 .protocol {
-  width: 210mm;
+  width: 215mm;
   height: 290mm;
   display: inline-flex;
   height: 100%;
   flex-direction: column;
   /* justify-content: center; */
-  align-items: center;
-  overflow: scroll;
+  /* align-items: center; */
+  overflow-y: scroll;
 }
 .body {
   width: 210mm;

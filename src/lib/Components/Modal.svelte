@@ -1,15 +1,14 @@
 <script lang='ts'>
-	export let showModal; // boolean
+    import Button from "./Button.svelte";
+
+	export let showModal : boolean;
 	export let onClick = () => {}
 
-	let dialog; // HTMLDialogElement
-	function onButtonClick(event: MouseEvent) {
-		let sender: HTMLDivElement = <HTMLDivElement>event.target;
-		sender.classList.toggle('unpressed');
-		if (event.type == 'mouseup') {
-			dialog.close()
-			sender.id.includes("save") && onClick()
-		}
+	let dialog : HTMLDialogElement;
+	function _onClick(command: string) {
+		dialog.close();
+		showModal = false;
+		command === "save" && onClick()
 	}
 
 	$: if (dialog && showModal) dialog.showModal();
@@ -20,17 +19,18 @@
 on:click|self={() => dialog.close()} -->
 <dialog
 	bind:this={dialog}
+	on:cancel={() => showModal = false}
 	style={$$props.style}
 >
-	<div on:click|stopPropagation>
+	<div on:keypress={e => e.key === 'Enter' && _onClick('save')} on:click|stopPropagation>
 		<slot name="header"/>
 		<hr />
 		<slot />
 		<hr />
 		<!-- svelte-ignore a11y-autofocus -->
 		<div class="buttons">
-			<div id="menu_reset" class="button unpressed" on:mouseup={onButtonClick} on:mousedown={onButtonClick}>отмена</div>
-			<div id="menu_save"  class="button unpressed" on:mouseup={onButtonClick} on:mousedown={onButtonClick}>сохранить</div>
+			<Button class="btn-modal" onClick={() => _onClick('reset')}>отмена</Button>
+			<Button class="btn-modal" onClick={() => _onClick('save')}>сохранить</Button>
 		</div>
 	</div>
 </dialog>
@@ -40,15 +40,29 @@ on:click|self={() => dialog.close()} -->
 		border-radius: 5px;
 		border: none;
 		padding: 0;
+
+		&::backdrop {
+			background: rgba(0, 0, 0, 0.3);
+		}
+		& > div {
+			padding: 1em;
+		}
+		&[open] {
+			animation: zoom 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+			&::backdrop {
+				animation: fade 0.2s ease-out;
+			}
+		}
 	}
-	dialog::backdrop {
-		background: rgba(0, 0, 0, 0.3);
+	.buttons {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		
 	}
-	dialog > div {
-		padding: 1em;
-	}
-	dialog[open] {
-		animation: zoom 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+	.buttons :global(.btn-modal) {
+		width: 10em;
+		background-color: rgb(0, 200, 255);
 	}
 	@keyframes zoom {
 		from {
@@ -58,9 +72,6 @@ on:click|self={() => dialog.close()} -->
 			transform: scale(1);
 		}
 	}
-	dialog[open]::backdrop {
-		animation: fade 0.2s ease-out;
-	}
 	@keyframes fade {
 		from {
 			opacity: 0;
@@ -69,28 +80,5 @@ on:click|self={() => dialog.close()} -->
 			opacity: 1;
 		}
 	}
-	.buttons {
-		display: flex;
-		flex-direction: row;
-		justify-content: space-between;
-	}
-	.button {
-    all: unset;
-		width: 10em;
-    height: 2em;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: default;
-    user-select: none;
-    border-radius: 0.5em;
-    box-shadow: 0px 1px 2px gray;
-    background-color: rgb(0, 200, 255);
-    color: white;
-    padding-top: 2px;
-    grid-row: 12;
-  }
-  .unpressed {
-    box-shadow: 1px 3px 3px gray;
-  }
+
 </style>

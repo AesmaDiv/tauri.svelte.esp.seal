@@ -86,9 +86,10 @@
     border-radius: 1ch;
     position: relative;
     padding: 0.3em;
-  }
-  .decor.downed { 
-    overflow: hidden;
+
+    &.downed {
+      overflow: hidden;
+    }
   }
   input, select, option, textarea {
     all: unset;
@@ -114,22 +115,23 @@
     transition-property: top, left, padding, opacity, font-size;
     transition-duration: 150ms;
     transition-timing-function: linear;
-  }
-  label.downed {
-    top: .3em;
-    left: .3em;
-    padding: 0.07em;
-    opacity: 30%;
-    font-size: 100%;
-    width: calc(var(--width));
-  }
-  label.lifted {
-    top: -0.6em;
-    left: .8em;
-    padding: 0.07em .2em;
-    opacity: 100%;
-    font-size: 60%;
-    width: fit-content;
+
+    &.downed {
+      top: .3em;
+      left: .3em;
+      padding: 0.07em;
+      opacity: 30%;
+      font-size: 100%;
+      width: calc(var(--width));
+    }
+    &.lifted {
+      top: -0.6em;
+      left: .8em;
+      padding: 0.07em .2em;
+      opacity: 100%;
+      font-size: 60%;
+      width: fit-content;
+    }
   }
 
 </style>

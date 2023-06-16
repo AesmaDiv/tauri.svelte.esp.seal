@@ -1,18 +1,27 @@
 <script lang="ts">
   import TextBox from "./Components/TextBox.svelte";
   import { ADAM_DATA, TEST_STATE, switchTest, resetTest, updatePoints, TestStates } from "../stores/equipment";
+  import Button from "./Components/Button.svelte";
 
   export let state : TestStates;
   export let fields = [];
-  const onClick = (event: Event) => {
-    let sender = <HTMLDivElement>event.target;
-    sender.classList.toggle("unpressed");
-    event.type === "mousedown" && ({
-      btn_start: () => switchTest(state),
-      btn_reset: () => resetTest(state),
-      btn_save:  () => updatePoints(state),
-    })[sender.id]();
+
+  const onClick = (command: string) => {
+    ({
+      start: () => switchButton(state),
+      reset: () => resetTest(state),
+      save:  () => updatePoints(state),
+    })[command]();
   }
+
+  let btn_start_class : string = "test";
+  let btn_start_value : string = "СТАРТ";
+  const switchButton = (state: TestStates) => {
+    btn_start_class = $TEST_STATE[state] ? 'test' : 'test stop';
+    btn_start_value = $TEST_STATE[state] ? 'СТАРТ' : 'СТОП';
+    switchTest(state);
+  }
+  
 </script>
 
 
@@ -23,11 +32,9 @@
     {/each}
   </div>
   <div class="buttons">
-    <div id="btn_start" class="button {!$TEST_STATE[state] ? 'unpressed' : ''}" on:mousedown={onClick}>
-      {!$TEST_STATE[state] ? 'СТАРТ' : 'СТОП'}
-    </div>
-    <div id="btn_reset" class="button unpressed" on:mousedown={onClick} on:mouseup={onClick}>сброс</div>
-    <div id="btn_save"  class="button unpressed" on:mousedown={onClick} on:mouseup={onClick}>сохранить</div>
+    <Button bind:class={btn_start_class} onClick={() => onClick('start')}>{btn_start_value}</Button>
+    <Button class="reset" onClick={() => onClick('reset')}>сброс</Button>
+    <Button class="save" onClick={() => onClick('save')}>сохранить</Button>
   </div>
 </div>
 
@@ -49,39 +56,26 @@
     grid-template-rows: 1fr 1fr;
     gap: .4em;
   }
-  .button {
-    height: 2em;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: default;
-    user-select: none;
-    border-radius: 0.5em;
-    box-shadow: 0px 1px 2px gray;
-    background-color: rgb(0, 200, 255);
-    color: white;
-    padding-top: 2px;
-  }
-  .unpressed {
-    box-shadow: 1px 3px 3px gray;
-  }
-  #btn_start {
+  .buttons :global(.test) {
     grid-row: 1;
     grid-column-start: 1;
     grid-column-end: 4;
-
-    background-color: red;
-  }
-  #btn_start.unpressed {
     background-color: green;
   }
-  #btn_reset {
+  .buttons :global(.stop) {
+    background-color: red;
+  }
+  .buttons :global(.reset),
+  .buttons :global(.save) {
     grid-row: 2;
+    background-color: rgb(0,200,255);
+    
+  }
+  .buttons :global(.reset) {
     grid-column-start: 1;
     grid-column-end: 1;
   }
-  #btn_save {
-    grid-row: 2;
+  .buttons :global(.save) {
     grid-column-start: 2;
     grid-column-end: 4;
   }

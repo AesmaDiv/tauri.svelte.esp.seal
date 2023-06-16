@@ -111,5 +111,6 @@ export function pointsToChart(source, name1, name2) {
     obj[name2].push({x: val.time, y: val[name2]});
     return obj;
   }, initial);
+
   return points;
 }

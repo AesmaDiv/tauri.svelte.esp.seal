@@ -1,6 +1,6 @@
 {
-  "ip_address": "10.10.10.1",
-  "db_path": "D:\\Projects\\Tauri\\tauri.svelte.esp.seal\\resources\\seal.sqlite",
+  "ip_address": "10.10.10.12",
+  "db_path": "F:\\Work\\Когалым\\Гидрозащита\\KogalymSeal.db",
   "test": {
     "test_press": {
       "duration": 180,

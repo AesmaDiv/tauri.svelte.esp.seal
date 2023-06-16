@@ -16,6 +16,6 @@
     "checkJs": true,
     "isolatedModules": true
   },
-  "include": ["src/**/*.d.ts", "src/**/*.ts", "src/**/*.js", "src/**/*.svelte", "src/lib/Chart"],
+  "include": ["src/**/*.d.ts", "src/**/*.ts", "src/**/*.js", "src/**/*.svelte", "src/lib/Chart", "src/database/db_dta.cjs"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

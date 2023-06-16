@@ -32,5 +32,4 @@
 {/each}
 
 <style>
-  
 </style>

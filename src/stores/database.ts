@@ -16,8 +16,8 @@ export let CURRENT_SEALTYPE: Writable<{}> = writable({});
 let db_path = "";
 SETTINGS.subscribe(async (settings) => {
   if (db_path = settings['db_path']) {
-    await readTestList();
     await readSealtypes();
+    await readTestList({select_first: true});
   }
 });
 CURRENT_SEALTYPE.subscribe(updateLimitsPress)
@@ -36,11 +36,13 @@ export type PowerPoint = {
 export let POINTS_PRESS: Writable<PressPoint[]> = writable([]);
 export let POINTS_POWER: Writable<PowerPoint[]> = writable([]);
 
-export async function readTestList() {
-  let testlist: any[] = await DBHelper.readRecordList(db_path, ' ID > 0 Order By ID Desc');
+export async function readTestList({condition="ID > 0", select_first=false}={}) {
+  let testlist: any[] = await DBHelper.readRecordList(db_path, `${condition} Order By ID Desc Limit 100`);
   TESTLIST.set(testlist);
   console.warn('TESTLIST updated');
-  if (!testlist.length) message("Список тестов пуст, проверьте путь к базе данных", "ВНИМАНИЕ");
+
+  if (!select_first || !testlist.length) return;
+  readRecord(testlist[0].id);
 }
 export async function readRecord(id: number) {
   // чтение записи из БД
@@ -77,9 +79,11 @@ export async function updatePoints(test_state: TestStates, points_data: PressPoi
 export async function updateRecord(record: Object) {
   if (!record['datetest']) record['datetest'] = getCurrentDate();
   if (!record['daterecv']) record['daterecv'] = getCurrentDate();
-  await DBHelper.updateRecord(db_path, record);
+  if (get(RECORD)['ordernum'] !== record['ordernum']) record['id'] = undefined;
+  let id = await DBHelper.updateRecord(db_path, record);
   console.log('Сохранение информации об объекте', record)
   await readTestList();
+  await readRecord(id);
 }
 export function resetRecord() {
   RECORD.set({});
