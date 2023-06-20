@@ -7,7 +7,7 @@
   export let markers = {}
   export let titles : string[] = [];
 
-  $: data = pointsToChart($$props.points, names.y1, names.y2);
+  $: data = pointsToChart($$props.points, names);
 </script>
 
 <div class="root" style={$$props.style}>

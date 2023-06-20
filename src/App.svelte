@@ -1,6 +1,6 @@
 <script lang="ts">
   import { readSettings } from "./stores/settings";
-  import { printProtocol } from "./funcs/shared";
+  import { printProtocol } from "./shared/funcs";
   import { onMount } from "svelte";
   import TableList from "./lib/TableList.svelte";
   import Slider from "./lib/Components/Slider.svelte";

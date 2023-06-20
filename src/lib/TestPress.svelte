@@ -2,8 +2,9 @@
   import TestControls from "./TestControls.svelte";
   import TestChart from "./TestChart.svelte";
 
-  import { TestStates, MARKER_PRESS, POINTS_PRESS as NewPoints } from "../stores/equipment";
+  import { MARKER_PRESS, POINTS_PRESS as NewPoints } from "../stores/equipment";
   import { LIMITS_PRESS, POINTS_PRESS as OldPoints } from "../stores/database";
+  import { TestStates } from "../shared/types";
 
   import { HEADERS_CHARTS } from "../configs/cfg_localization";
   import { DATANAMES } from "../configs/cfg_press";
@@ -15,7 +16,7 @@
 </script>
 
 <div class="root">
-  <TestControls state={TestStates.PRESS} fields={DATANAMES} style="width: 300px;"/>
+  <TestControls test_state={TestStates.PRESS} fields={DATANAMES} style="width: 300px;"/>
   <TestChart {titles} axies={AXIES} points={$NewPoints || $OldPoints} limits={$LIMITS_PRESS} {names} markers={$MARKER_PRESS}/>
 </div>
 

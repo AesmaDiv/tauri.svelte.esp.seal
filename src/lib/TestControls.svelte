@@ -1,27 +1,21 @@
 <script lang="ts">
   import TextBox from "./Components/TextBox.svelte";
-  import { ADAM_DATA, TEST_STATE, switchTest, resetTest, updatePoints, TestStates } from "../stores/equipment";
+  import { ADAM_DATA, TEST_STATE, switchTest, resetTest, updatePoints } from "../stores/equipment";
+  import type { TestStates } from "../shared/types";
   import Button from "./Components/Button.svelte";
 
-  export let state : TestStates;
+  export let test_state : TestStates;
   export let fields = [];
 
   const onClick = (command: string) => {
     ({
-      start: () => switchButton(state),
-      reset: () => resetTest(state),
-      save:  () => updatePoints(state),
+      start: () => switchTest(test_state),
+      reset: () => resetTest(test_state),
+      save:  () => updatePoints(test_state),
     })[command]();
   }
-
-  let btn_start_class : string = "test";
-  let btn_start_value : string = "СТАРТ";
-  const switchButton = (state: TestStates) => {
-    btn_start_class = $TEST_STATE[state] ? 'test' : 'test stop';
-    btn_start_value = $TEST_STATE[state] ? 'СТАРТ' : 'СТОП';
-    switchTest(state);
-  }
-  
+  $: [btn_start_class, btn_start_value] = $TEST_STATE[test_state] ?
+  ["test stop", "СТОП"] : ["test", "СТАРТ"];
 </script>
 
 
@@ -32,7 +26,7 @@
     {/each}
   </div>
   <div class="buttons">
-    <Button bind:class={btn_start_class} onClick={() => onClick('start')}>{btn_start_value}</Button>
+    <Button class={btn_start_class} onClick={() => onClick('start')}>{btn_start_value}</Button>
     <Button class="reset" onClick={() => onClick('reset')}>сброс</Button>
     <Button class="save" onClick={() => onClick('save')}>сохранить</Button>
   </div>
@@ -56,6 +50,7 @@
     grid-template-rows: 1fr 1fr;
     gap: .4em;
   }
+
   .buttons :global(.test) {
     grid-row: 1;
     grid-column-start: 1;
@@ -69,7 +64,6 @@
   .buttons :global(.save) {
     grid-row: 2;
     background-color: rgb(0,200,255);
-    
   }
   .buttons :global(.reset) {
     grid-column-start: 1;

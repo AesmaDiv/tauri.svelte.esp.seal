@@ -20,11 +20,13 @@
   `;
 
   $: [points, coefs] = (() => {
-    let coefs = {
+    let coefs : Point = {
       x: width / (axis_x.maximum - axis_x.minimum),
       y: height / (axis_y.maximum - axis_y.minimum)
     };
-    let points = data.map(point => { return { x: point.x * coefs.x, y: height - point.y * coefs.y}});
+    let points : Point[] = data.map(point => { 
+      return { x: point.x * coefs.x, y: height - point.y * coefs.y}
+    });
 
     return [points, coefs]
   })();
@@ -35,7 +37,7 @@
   <div class="title" style="{title !== "" && 'margin: 0em 0em;'}">{title}</div>
   <div class="container" bind:clientWidth={width} bind:clientHeight={height}
     style="left: {axis_y.maximum.toString().length + 0.2}ch; top: {!!title ? 1.4 : 1}em">
-  {#if width}
+  {#if width && height}
     {@const pix_x = width / axis_x.ticks}
     {@const pix_y = height / axis_y.ticks}
     {@const val_x = (axis_x.maximum - axis_x.minimum) / axis_x.ticks}
@@ -61,7 +63,7 @@
       </g>
       <!-- limits -->
       {#if limits}
-      <g class="limits" transform="translate(0, {height}) scale(1,-1)">
+        <g class="limits" transform="translate(0, {height}) scale(1,-1)">
         {#if limits.lo}
           {@const lim_lo = limits.lo * coefs.y}
           <rect x={0} y={0} {width} height={lim_lo} fill='yellow' fill-opacity='25%'/>
@@ -73,7 +75,7 @@
         </g>
       {/if}
       <!-- marker -->
-      {#if marker}
+      {#if marker }
         {@const mx = marker.x * coefs.x}
         {@const my = height - marker.y * coefs.y}
         <path transform="translate(0,{my})" d="M 0,0 l -5,5 v -10 z"/>
@@ -81,9 +83,11 @@
         <path transform="translate({mx},{my})" d="M -5,0 h 10 M 0,-5 v 10" stroke='red'/>
       {/if}
       <!-- data -->
-      <svg style="overflow: hidden" {width} {height}>
-        {@html svgPath(points, bezierCommand, chart_style)}
-      </svg>
+      {#if points.length }
+        <svg style="overflow: hidden" {width} {height}>
+          {@html svgPath(points, bezierCommand, chart_style)}
+        </svg>
+      {/if}
     </svg>
   {/if}
   </div>

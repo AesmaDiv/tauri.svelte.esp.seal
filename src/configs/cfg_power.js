@@ -7,15 +7,15 @@ export const PowerProps = {
 }
 /** Свойства полей формы измерения потребляемой мощности */
 export const DATANAMES = [
-  {name: 'time',   fixed: 0, label: 'Время испытания'},
-  {name: 'rpm',    fixed: 0, label: 'Скорость, мин−1'},
-  {name: 'torque', fixed: 4, label: 'Момент, Н*м'},
-  {name: 'power',  fixed: 4, label: 'Мощность, кВт'},
-  {name: 'temper', fixed: 2, label: 'Температура, °C'},
+  {name: 'time', fixed: 0, label: 'Время испытания'},
+  {name: 'rpm',        fixed: 0, label: 'Скорость, мин−1'},
+  {name: 'torque',     fixed: 4, label: 'Момент, Н*м'},
+  {name: 'power',      fixed: 4, label: 'Мощность, кВт'},
+  {name: 'temper',     fixed: 2, label: 'Температура, °C'},
 ]
 /** Пределы допуска для измерения потребляемой мощности */
 export const AXIES = {
-  time:   { minimum: 0, maximum: 25,  ticks: 5, },
-  power:  { minimum: 0, maximum: 0.6, ticks: 6, round: 1 },
-  temper: { minimum: 0, maximum: 150, ticks: 5, },
+  time : { minimum: 0, maximum: 25,  ticks: 5, },
+  power      : { minimum: 0, maximum: 0.6, ticks: 6, round: 1 },
+  temper     : { minimum: 0, maximum: 150, ticks: 5, },
 }

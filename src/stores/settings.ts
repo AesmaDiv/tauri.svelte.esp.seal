@@ -1,12 +1,13 @@
 import { readTextFile, writeTextFile } from "@tauri-apps/api/fs";
-// import { } from "@tauri-apps/api/path";
 import { type Writable, writable, get } from "svelte/store";
-import { assign } from "../funcs/shared";
+import { assign } from "../shared/funcs";
+import type { ISettings } from "../shared/types";
 import { to_number } from "svelte/internal";
 
 const SETTINGS_PATH : string = "D:\\Projects\\Tauri\\tauri.svelte.esp.seal\\resources\\settings.json";
-export let SETTINGS : Writable<Object> = writable({});
+export let SETTINGS : Writable<ISettings> = writable({} as ISettings);
 
+/** Чтение настроек программы */
 export async function readSettings() {
   readTextFile(SETTINGS_PATH)
   .then(text => {
@@ -16,7 +17,7 @@ export async function readSettings() {
   })
   .catch(reason => console.error("Ошибка чтения файла конфигурации: %o", reason));
 }
-
+/** Сохранение настроек программы */
 export async function saveSettings(form: FormData, refresh: boolean = false) {
   let settings = {};
   form.forEach((v, k) => {

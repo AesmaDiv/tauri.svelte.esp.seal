@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount, beforeUpdate } from "svelte";
-  import { getInheritedColor, getInheritedBackgroundColor } from "../../funcs/shared";
+  import { getInheritedColor, getInheritedBackgroundColor } from "../../shared/funcs";
 
   export let title: string = "Заголовок";
   export let value: any = "";

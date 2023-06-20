@@ -4,8 +4,8 @@
   "test": {
     "test_press": {
       "duration": 180,
-      "pulling_rate": 250,
-      "points_count": 10
+      "pulling_rate": 50,
+      "points_count": 180
     },
     "test_power": {
       "duration": 1500,

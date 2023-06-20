@@ -4,7 +4,7 @@
   import { AXIES as power_axies, POINTS_MAX } from "../configs/cfg_power";
 
   import { HEADERS_PROTOCOL, HEADERS_CHARTS, COMBOS, transliterate } from "../configs/cfg_localization";
-  import { roundValue, decimal2time } from "../funcs/shared";
+  import { roundValue, decimal2time } from "../shared/funcs";
   import Logo from "./svg/SVGLogo.svelte";
   import TestChart from "./TestChart.svelte";
 

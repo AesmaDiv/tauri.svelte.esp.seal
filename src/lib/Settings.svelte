@@ -2,7 +2,7 @@
   import TextBox from "./Components/TextBox.svelte";
   import { TEST, ANALOG, DIGITAL } from "../configs/cfg_menu";
   // import { $SETTINGS } from "../configs/cfg_application";
-  import { extract } from "../funcs/shared";
+  import { extract } from "../shared/funcs";
   import { SETTINGS } from "../stores/settings";
 
 </script>
