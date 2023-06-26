@@ -13,12 +13,12 @@ export const TEST = {
 /** Описание таблицы параметров аналоговых слотов */
 export const ANALOG = {
   ROWS: [
-    { name: 'adam.analog.sys', label: 'Давление в системе' },
-    { name: 'adam.analog.top', label: 'Давление верхней диаф' },
-    { name: 'adam.analog.btm', label: 'Давление нижней диаф' },
-    { name: 'adam.analog.rpm', label: 'Скорость' },
-    { name: 'adam.analog.trq', label: 'Момент' },
-    { name: 'adam.analog.tmp', label: 'Температура' },
+    { name: 'adam.analog.press_sys', label: 'Давление в системе' },
+    { name: 'adam.analog.press_top', label: 'Давление верхней диаф' },
+    { name: 'adam.analog.press_btm', label: 'Давление нижней диаф' },
+    { name: 'adam.analog.torque',    label: 'Момент' },
+    { name: 'adam.analog.temper',    label: 'Температура' },
+    { name: 'adam.analog.speed',     label: 'Скорость' },
   ],
   COLUMNS: [
     { name: 'slot',    label: 'слот',    parse_func: parseInt },

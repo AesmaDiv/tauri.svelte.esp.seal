@@ -1,10 +1,9 @@
 <script lang="ts">
-    import Logo from "./svg/SVGLogo.svelte";
     import Modal from "./Components/Modal.svelte";
     import Settings from "./Settings.svelte";
     import { saveSettings } from "../stores/settings";
     import Button from "./Components/Button.svelte";
-    import SvgMenu from "./svg/SVGMenu.svelte";
+    import { switchAdamReading, ADAM_READING } from "../stores/equipment";
 
     let showModal = false;
 
@@ -18,6 +17,7 @@
     }
     function onClick(command: string) {
       command === 'menu' && (showModal = !showModal);
+      command === 'adam' && switchAdamReading();
     }
 
 </script>
@@ -32,7 +32,11 @@
     &#9776;
   </Button>
   <div class="header title">OOO «ЭПУ Сервис»: Испытание Гидрозащиты</div>
-  <Button class="btn-menu" >&#9881</Button>
+  <Button class="btn-menu" onClick={() => onClick('adam')}
+    style="background: {$ADAM_READING ? 'green' : 'red'}; color: white;"
+    >
+    &#9881;
+  </Button>
 </div>
 
 <style>

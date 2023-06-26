@@ -2,7 +2,7 @@
   import TestControls from "./TestControls.svelte";
   import TestChart from "./TestChart.svelte";
 
-  import { MARKER_PRESS, POINTS_PRESS as NewPoints } from "../stores/equipment";
+  import { MARKER_PRESS, POINTS_PRESS as NewPoints } from "../stores/testing";
   import { LIMITS_PRESS, POINTS_PRESS as OldPoints } from "../stores/database";
   import { TestStates } from "../shared/types";
 

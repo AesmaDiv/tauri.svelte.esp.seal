@@ -1,8 +1,10 @@
 <script lang="ts">
   import { TESTLIST, readRecord, readTestList } from "../stores/database";
   import { RECORD_SEARCH_COLUMNS } from "../database/db_tables";
+  import { haveUnsavedData, isTestRunning } from "../stores/testing";
   import TextBox from "./Components/TextBox.svelte";
   import Button from "./Components/Button.svelte";
+  import { showMessage, NotifierKind } from "./Notifier/notifier";
 
 
   let selected_row = 0;
@@ -10,7 +12,12 @@
   let last = [];
 
   const hide = (key: string) => key === 'id' ? 'display: none' : '';
-  function onClick(event) {
+  async function onClick(event) {
+    if (isTestRunning()) {
+      showMessage("Выбор записей недоступен! Идёт испытание..", NotifierKind.WARNING);
+      return;
+    }
+    if (await haveUnsavedData()) return;
     let row: HTMLTableRowElement = <HTMLTableRowElement>event.target.parentElement;
     if (selected_row === (selected_row = parseInt(row.id) || 0)) return;
     let obj: Object = [...row.children].reduce((accum, current) => {

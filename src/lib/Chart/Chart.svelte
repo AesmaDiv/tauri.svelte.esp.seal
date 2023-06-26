@@ -1,8 +1,7 @@
 <!-- // TODO: доработать компонент для динамического добавления точек, чтоб не пересчитывал координаты для каждой точки -->
 <script lang="ts">
-  import { svgPath, bezierCommand } from "./chart";
+  import { svgPath, bezierCommand, fit } from "./chart";
   import type { Limits, AxisInfo, Point } from "./chart";
-
 
   export let title : string = "";
   export let axis_x : AxisInfo = { minimum: 0, maximum: 10, ticks: 10 };
@@ -19,13 +18,18 @@
     fill='none'
   `;
 
+
+
   $: [points, coefs] = (() => {
     let coefs : Point = {
       x: width / (axis_x.maximum - axis_x.minimum),
       y: height / (axis_y.maximum - axis_y.minimum)
     };
     let points : Point[] = data.map(point => { 
-      return { x: point.x * coefs.x, y: height - point.y * coefs.y}
+      return { 
+        x: fit(point.x, axis_x.minimum, axis_x.maximum) * coefs.x,
+        y: height - fit(point.y, axis_y.minimum, axis_y.maximum) * coefs.y
+      }
     });
 
     return [points, coefs]
@@ -76,8 +80,8 @@
       {/if}
       <!-- marker -->
       {#if marker }
-        {@const mx = marker.x * coefs.x}
-        {@const my = height - marker.y * coefs.y}
+        {@const mx = fit(marker.x, axis_x.minimum, axis_y.maximum) * coefs.x}
+        {@const my = height - fit(marker.y, axis_y.minimum, axis_y.maximum) * coefs.y}
         <path transform="translate(0,{my})" d="M 0,0 l -5,5 v -10 z"/>
         <path transform="translate({mx},{height})" d="M 0,0 l 5,5 h -10 z"/>
         <path transform="translate({mx},{my})" d="M -5,0 h 10 M 0,-5 v 10" stroke='red'/>

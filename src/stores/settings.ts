@@ -4,8 +4,12 @@ import { assign } from "../shared/funcs";
 import type { ISettings } from "../shared/types";
 import { to_number } from "svelte/internal";
 
+
+/** Путь к файлу настроек TODO: поменять */
 const SETTINGS_PATH : string = "D:\\Projects\\Tauri\\tauri.svelte.esp.seal\\resources\\settings.json";
+/** Настройки программы */
 export let SETTINGS : Writable<ISettings> = writable({} as ISettings);
+
 
 /** Чтение настроек программы */
 export async function readSettings() {
@@ -21,13 +25,13 @@ export async function readSettings() {
 export async function saveSettings(form: FormData, refresh: boolean = false) {
   let settings = {};
   form.forEach((v, k) => {
-    const value = ["ip_address", "db_path"].includes(k) ? v.toString() : to_number(v);
+    const value = ["adam.ip", "db_path"].includes(k) ? v.toString() : to_number(v);
     assign(settings, k.split("."), value)
   });
   writeTextFile(SETTINGS_PATH, JSON.stringify(settings, null, 2))
   .then(() => {
     console.log("Файл конфигурации сохранён.");
-    refresh && readSettings();
+    if (refresh) readSettings();
   })
   .catch(reason => console.error("Ошибка записи файла конфигурации: %o", reason));
 }

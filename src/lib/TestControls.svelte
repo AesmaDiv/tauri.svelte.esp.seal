@@ -1,28 +1,48 @@
 <script lang="ts">
   import TextBox from "./Components/TextBox.svelte";
-  import { ADAM_DATA, TEST_STATE, switchTest, resetTest, updatePoints } from "../stores/equipment";
-  import type { TestStates } from "../shared/types";
+  import { NotifierKind, showMessage } from "./Notifier/notifier";
+  import { ADAM_DATA } from "../stores/equipment";
+  import { TEST_STATE, updatePoints, resetPoints, switchTest } from "../stores/testing";
+  import { TestStates } from "../shared/types";
   import Button from "./Components/Button.svelte";
 
   export let test_state : TestStates;
   export let fields = [];
 
+  function toTime(value: number) : string {
+    let result = new Date(0);
+    if ($TEST_STATE === test_state) result.setMilliseconds(value * 1000)
+    return result.toISOString().slice(11,23);
+  }
+  function toTextBox(i: number, value: number, fixed = 0) : string {
+    if (i === 0) return toTime(value);
+    return value?.toFixed(fixed) || '0';
+  }
+  function startStop() {
+    showMessage(
+      $TEST_STATE === TestStates.IDLE ? "Испытание запущено" : "Испытание прервано",
+      $TEST_STATE === TestStates.IDLE ? NotifierKind.NORMAL : NotifierKind.WARNING
+    );
+    switchTest(test_state);
+  }
+
   const onClick = (command: string) => {
     ({
-      start: () => switchTest(test_state),
-      reset: () => resetTest(test_state),
+      start: () => startStop(),
+      reset: () => resetPoints(test_state),
       save:  () => updatePoints(test_state),
     })[command]();
   }
-  $: [btn_start_class, btn_start_value] = $TEST_STATE[test_state] ?
+  $: [btn_start_class, btn_start_value] = $TEST_STATE === test_state ?
   ["test stop", "СТОП"] : ["test", "СТАРТ"];
 </script>
 
 
 <div class="root" style={$$props.style}>
   <div class="info">
-    {#each fields as item}
-      <TextBox name={item.name} title={item.label} value={$ADAM_DATA[item.name]?.toFixed(item.fixed || 0) || 0}/>
+    {#each fields as item, i}
+      <TextBox name={item.name} title={item.label}
+      value={toTextBox(i, $ADAM_DATA[item.name], item.fixed) || 0 }/>
     {/each}
   </div>
   <div class="buttons">

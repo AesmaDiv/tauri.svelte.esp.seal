@@ -6,21 +6,24 @@ use adam::models::{Data, Analog, Digital, AdamData, Endian};
 use adam::{read, write};
 
 
-static mut ANALOG: Analog = Analog {
-  slot: [[0u16; 8]; 8],
-};
-static mut DIGITAL: Digital = Digital {
-  slot: [0u16; 8]
-};
+// static mut ANALOG: Analog = Analog {
+//   slot: [[0u16; 8]; 8],
+// };
+// static mut DIGITAL: Digital = Digital {
+//   slot: [0u16; 8]
+// };
 
 pub fn read_adam(address: &str) -> AdamData {
-  let mut analog = read::<Analog>(address, Endian::BIG);
-  let mut digital = read::<Digital>(address, Endian::BIG);
-
-  unsafe {
-    if analog.is_none() { analog = Some(randomize_analog()) /* analog = Some(ANALOG.clone()) */}
-    if digital.is_none() { digital = Some(DIGITAL.clone()) }
-  }
+  //// On error will return empty, but valid structure
+  // let mut analog = read::<Analog>(address, Endian::BIG);
+  // let mut digital = read::<Digital>(address, Endian::BIG);
+  // unsafe {
+  //   if analog.is_none() { analog = Some(ANALOG.clone()) }
+  //   if digital.is_none() { digital = Some(DIGITAL.clone()) }
+  // }
+  //// On error will return None for slots
+  let analog = read::<Analog>(address, Endian::BIG);
+  let digital = read::<Digital>(address, Endian::BIG);
 
   return AdamData{ analog, digital };
 }

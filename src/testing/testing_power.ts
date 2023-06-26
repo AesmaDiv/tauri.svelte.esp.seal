@@ -1,26 +1,37 @@
 import { get } from "svelte/store";
 import { SETTINGS } from "../stores/settings";
-import type { ISettings } from "../shared/types";
-import { ADAM_DATA } from "../stores/equipment";
+import type { Sensors, ISettings } from "../shared/types";
+import { ADAM_DATA, } from "../stores/equipment";
+import { POINTS_POWER } from "../stores/testing";
 
 
+/** Выполнение тика испытания */
 export function doTest() {
   const settings : ISettings = get(SETTINGS);
-  return generate(settings.test.test_power.points_count);
+  return updatePoints(settings.test.test_power.points_count);
 }
-function generate(max: number) : boolean {
-  let old_data = get(ADAM_DATA);
-  let new_data = {
-    time : old_data.time + 1,
-    power      : old_data.power + (0.1 - Math.random()),
-    temper     : old_data.temper + (1 - Math.random()),
-  };
-  if (new_data.power > 0.6) { new_data.power = 0.6}
-  else if (new_data.power < 0) { new_data.power = 0}
-  if (new_data.temper > 150) { new_data.temper = 150}
-  else if (new_data.temper < 0) { new_data.temper = 0}
+/** Тик фиксации точки  */
+function updatePoints(max: number) : boolean {
+  let test_time = 0;
+  ADAM_DATA.update(data => {
+    data.time += 1;
+    test_time = data.time;
+    addPoint(data);
 
-  ADAM_DATA.update(prev => { return {...prev, ...new_data } });
+    return data;
+  });
 
-  return new_data.time < max;
+  return test_time < max;
+}
+
+function addPoint(data: Sensors) {
+  POINTS_POWER.update(points => {
+    if (!points) points = [];
+    points.push({
+      time   : data.time,
+      power  : data.power,
+      temper : data.temper
+    });
+    return points;
+  });
 }

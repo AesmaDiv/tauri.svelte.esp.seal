@@ -8,7 +8,7 @@ export const DBHelper = {
   readRecordList: async function(db_path, condition) {
     let result = [];
     const object = await invoke('read_testlist', {dbPath: db_path, condition: condition});
-    Array.isArray(object) && result.push(...object);
+    if (Array.isArray(object)) result.push(...object);
 
     return result;
   },
@@ -16,7 +16,7 @@ export const DBHelper = {
   readSealTypes: async function(db_path) {
     let result = [];
     const object = await invoke('read_types', {dbPath: db_path, table: "SealTypes"});
-    Array.isArray(object) && result.push(...object);
+    if (Array.isArray(object)) result.push(...object);
 
     return result;
   },
@@ -24,7 +24,7 @@ export const DBHelper = {
   readDictionary: async function(db_path, table) {
     let result = [];
     const object = await invoke('read_dictionary', {dbPath: db_path, table: table});
-    Array.isArray(object) && result.push(...object);
+    if (Array.isArray(object)) result.push(...object);
 
     return result;
   },

@@ -23,12 +23,12 @@
       if ('items' in val || ['id', 'sealtype'].includes(val.name)) { obj[val.name] = parseInt(obj[val.name]) }
       return obj;
     }, {});
-    checkRequired(record) && updateRecord(record);
+    if (checkRequired(record)) updateRecord(record);
   }
   function checkRequired(record: {}) : boolean {
     if (!record) return false;
     let result = RECORD_COLUMNS.filter(item => item.required).every(item => !!record[item.name]);
-    !result && message('Не все необходимые поля заполнены', 'Внимание');
+    if (!result) message('Не все необходимые поля заполнены', 'Внимание');
     return result;
   }
 </script>
@@ -36,7 +36,7 @@
 <form class="record-form" bind:this={form} method="POST">
   <SealInfo />
   <SealType />
-  <Button class="buttons" style="grid-column: 1;" onClick={() => onClick('reset')}>сброс</Button>
+  <Button class="buttons" style="grid-column: 1;" onClick={() => onClick('reset')}>новый</Button>
   <Button class="buttons" style="grid-column: 4;" onClick={() => onClick('save')}>сохранить</Button>
 </form>
 

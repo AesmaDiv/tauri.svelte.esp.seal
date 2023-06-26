@@ -9,6 +9,7 @@
   import TestPower from "./lib/TestPower.svelte";
   import Protocol from "./lib/Protocol.svelte";
   import AppHeader from "./lib/AppHeader.svelte";
+    import Notifier from "./lib/Notifier/Notifier.svelte";
 
 
   onMount(async () => await readSettings());
@@ -45,6 +46,7 @@
     <Slider title="Протокол :" bind:group={slider_group} {style}>
       <div class="slider-content protocol"><button style="width: 200px;" on:mousedown={printProtocol}>Print</button><Protocol/></div>
     </Slider>
+    <div class="notifier"><Notifier content="Hello world!!!"/></div>
   </div>
 </main>
 
@@ -84,5 +86,10 @@
     outline: 1px solid black;
     overflow-y: scroll;
     width: auto;
+  }
+  .notifier {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
   }
 </style>

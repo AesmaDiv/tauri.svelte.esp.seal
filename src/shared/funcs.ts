@@ -59,6 +59,9 @@ export function roundValue(float, decnum) {
   let pow = Math.pow(10, decnum);
   return Math.round(float * pow) / pow;
 }
+export function fit(value: number, min: number, max: number) {
+  return value > max ? max : value < min ? min : value;
+}
 /** Задать значение вложенного поля объекта */
 export function assign(obj, keyPath, value) {
   const lastKeyIndex = keyPath.length-1;

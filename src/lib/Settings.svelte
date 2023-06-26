@@ -5,13 +5,17 @@
   import { extract } from "../shared/funcs";
   import { SETTINGS } from "../stores/settings";
 
+  const db_style = "grid-column-start: 1; grid-column-end: 3;";
 </script>
 
 <form id="settings-form">
   {#if $SETTINGS}
   <div class="grid11">
-    <TextBox name="ip_address" title="Adam IP" value={extract($SETTINGS, "ip_address")}/>
-    <TextBox name="db_path" title="Путь к базе данных" value={extract($SETTINGS, "db_path")}/>
+    <div class="textboxes">
+      <TextBox name="adam.ip" title="Adam IP" value={extract($SETTINGS, "adam.ip")}/>
+      <TextBox name="adam.pulling_rate" title="Частота опроса, мс" value={extract($SETTINGS, "adam.pulling_rate")}/>
+      <TextBox name="db_path" title="Путь к базе данных" value={extract($SETTINGS, "db_path")} style={db_style}/>
+    </div>
     <!-- ПАРАМЕТРЫ ИСПЫТАНИЙ -->
     <table class="table-test">
       <tr>
@@ -85,6 +89,12 @@
     gap: 0.5em;
     grid-row: 1;
     grid-column: 1;
+  }
+  .textboxes {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: 1fr;
   }
   .table-test {
     height: fit-content;

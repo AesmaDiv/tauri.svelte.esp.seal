@@ -2,7 +2,7 @@
   import TestControls from "./TestControls.svelte";
   import TestChart from "./TestChart.svelte";
   import { TestStates } from "../shared/types";
-  import { MARKER_POWER, POINTS_POWER as NewPoints } from "../stores/equipment";
+  import { MARKER_POWER, POINTS_POWER as NewPoints } from "../stores/testing";
   import { POINTS_POWER as OldPoints } from "../stores/database";
   import { DATANAMES, AXIES } from "../configs/cfg_power";
   import { HEADERS_CHARTS } from "../configs/cfg_localization";

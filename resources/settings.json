@@ -1,19 +1,7 @@
 {
-  "ip_address": "10.10.10.12",
-  "db_path": "F:\\Work\\Когалым\\Гидрозащита\\KogalymSeal.db",
-  "test": {
-    "test_press": {
-      "duration": 180,
-      "pulling_rate": 50,
-      "points_count": 180
-    },
-    "test_power": {
-      "duration": 1500,
-      "pulling_rate": 1000,
-      "points_count": 10
-    }
-  },
   "adam": {
+    "ip": "192.168.1.100",
+    "pulling_rate": 505,
     "digital": {
       "lamp": {
         "slot": 1,
@@ -37,7 +25,7 @@
       }
     },
     "analog": {
-      "sys": {
+      "press_sys": {
         "slot": 0,
         "channel": 1,
         "d_range": 65535,
@@ -45,15 +33,15 @@
         "v_range": 10,
         "coeff": 1.1
       },
-      "top": {
+      "press_top": {
         "slot": 0,
         "channel": 3,
         "d_range": 65535,
         "offset": 0,
         "v_range": 10,
-        "coeff": 3.3
+        "coeff": 2.1
       },
-      "btm": {
+      "press_btm": {
         "slot": 0,
         "channel": 2,
         "d_range": 65535,
@@ -61,15 +49,7 @@
         "v_range": 10,
         "coeff": 2.2
       },
-      "rpm": {
-        "slot": 0,
-        "channel": 4,
-        "d_range": 65535,
-        "offset": 0,
-        "v_range": 10,
-        "coeff": 4.4
-      },
-      "trq": {
+      "torque": {
         "slot": 0,
         "channel": 5,
         "d_range": 65535,
@@ -77,14 +57,35 @@
         "v_range": 10,
         "coeff": 5.5
       },
-      "tmp": {
+      "temper": {
         "slot": 0,
         "channel": 6,
         "d_range": 65535,
         "offset": 0,
         "v_range": 10,
         "coeff": 6.6
+      },
+      "speed": {
+        "slot": 0,
+        "channel": 4,
+        "d_range": 65535,
+        "offset": 0,
+        "v_range": 10,
+        "coeff": 4.4
       }
+    }
+  },
+  "db_path": "F:\\Work\\Когалым\\Гидрозащита\\KogalymSeal.db",
+  "test": {
+    "test_press": {
+      "duration": 180,
+      "pulling_rate": 100,
+      "points_count": 180
+    },
+    "test_power": {
+      "duration": 1500,
+      "pulling_rate": 1000,
+      "points_count": 10
     }
   }
 }

@@ -17,8 +17,21 @@ export interface IMarkerPower {
   power : Point,
   temper: Point
 };
-/** Класс блока данных с ADAM */
-export class AdamData {
+/** Структура данный с ADAM */
+export interface IAdamData {
+  analog: IAnalog,
+  digital: IDigital,
+}
+/** Структура аналоговых каналов ADAM */
+export interface IAnalog {
+  slot: Array<[number, number, number, number, number, number, number, number]>,
+}
+/** Структура дискретных канало ADAM */
+export interface IDigital {
+  slot: Array<number>
+}
+/** Класс данных с датчиков */
+export class Sensors {
   time      : number = 0;
   press_sys : number = 0;
   press_top : number = 0;
@@ -27,6 +40,24 @@ export class AdamData {
   torque    : number = 0;
   temper    : number = 0;
   power     : number = 0;
+};
+/** Класс буферов данных с датчиков */
+export class SensorsBuffers {
+  press_sys : VBuffer;
+  press_top : VBuffer;
+  press_btm : VBuffer;
+  speed     : VBuffer;
+  torque    : VBuffer;
+  temper    : VBuffer;
+
+  constructor(size: number) {
+    this.press_sys = new VBuffer(size);
+    this.press_top = new VBuffer(size);
+    this.press_btm = new VBuffer(size);
+    this.speed     = new VBuffer(size);
+    this.torque    = new VBuffer(size);
+    this.temper    = new VBuffer(size);
+  }
 };
 /** Тип точки для испытания давления диафрагм */
 export type PressPoint = {
@@ -67,7 +98,7 @@ export interface ISettings {
   },
   adam: {
     ip: string,
-    pulling_rate: number
+    pulling_rate: number,
     digital: {
       lamp:   IAdamSource,
       engine: IAdamSource,
@@ -76,12 +107,36 @@ export interface ISettings {
       alarm:  IAdamSource,
     },
     analog: {
-      sys: IAdamSourceParams,
-      btm: IAdamSourceParams,
-      top: IAdamSourceParams,
-      rpm: IAdamSourceParams,
-      trq: IAdamSourceParams,
-      tmp: IAdamSourceParams,
+      press_sys: IAdamSourceParams,
+      press_top: IAdamSourceParams,
+      press_btm: IAdamSourceParams,
+      torque: IAdamSourceParams,
+      temper: IAdamSourceParams,
+      speed: IAdamSourceParams,
     }
   },
 }
+
+export class VBuffer {
+  values : Array<number>;
+  size   : number;
+  index  : number;
+
+  constructor(size: number) {
+    this.values = Array<number>(size);
+    this.size = size;
+    this.index = 0;
+  }
+
+  add(value: number) {
+    this.values[this.index] = value;
+    this.index += 1;
+    if (this.index === this.size) this.index = 0;
+  }
+
+  getAverage() : number{
+    let sum = this.values.reduce((a: number, v: number) => a + v, 0);
+    let avr = sum / this.size;
+    return avr;
+  }
+};

@@ -32,7 +32,7 @@
     label?.classList.toggle('downed');
   }
   function onChange() {
-    $$props.onChange && $$props.onChange(value);
+    if ($$props.onChange) $$props.onChange(value);
   }
 </script>
 

@@ -1,26 +1,39 @@
 import { get } from "svelte/store";
 import { SETTINGS } from "../stores/settings";
-import { ADAM_DATA } from "../stores/equipment";
-import type { AdamData, ISettings, PressPoint } from "../shared/types";
+import { ADAM_DATA, } from "../stores/equipment";
+import { POINTS_PRESS } from "../stores/testing";
+import type { Sensors, ITiming, } from "../shared/types";
+import { NotifierKind, showMessage } from "../lib/Notifier/notifier";
 
 
 export function doTest() {
-  const settings : ISettings = get(SETTINGS);
-  return generate(settings.test.test_press.points_count)
+  const timings : ITiming = get(SETTINGS).test.test_press;
+  const max = timings.points_count;
+  const rate = timings.pulling_rate;
+  const result = updatePoints(max, rate);
+  if (!result) showMessage("Испытание закончено", NotifierKind.SUCCESS);
+  return result;
 }
-function generate(max: number) : boolean {
-  let old_data : AdamData = get(ADAM_DATA);
-  let new_data : PressPoint = {
-    time : old_data.time + 1,
-    press_top  : old_data.press_top + (0.5 - Math.random()),
-    press_btm  : old_data.press_btm + (0.5 - Math.random()),
-  };
-  if (new_data.press_top > 2.5) { new_data.press_top = 2.5}
-  else if (new_data.press_top < 0) { new_data.press_top = 0}
-  if (new_data.press_btm > 3.5) { new_data.press_btm = 3.5}
-  else if (new_data.press_btm < 0) { new_data.press_btm = 0}
+function updatePoints(max: number, rate: number) : boolean {
+  let test_time = 0;
+  ADAM_DATA.update(data => {
+    data.time += rate / 1000;
+    test_time = +(data.time).toFixed(2);
+    if (Number.isInteger(test_time)) addPoint(data);
 
-  ADAM_DATA.update(prev => { return {...prev, ...new_data } });
+    return data;
+  });
+  return test_time < max;
+}
 
-  return new_data.time < max;
+function addPoint(data: Sensors) {
+  POINTS_PRESS.update(points => {
+    if (!points) points = [];
+    points.push({
+      time      : data.time,
+      press_top : data.press_top,
+      press_btm : data.press_btm
+    });
+    return points;
+  })
 }

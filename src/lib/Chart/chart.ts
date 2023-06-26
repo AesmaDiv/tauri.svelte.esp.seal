@@ -12,6 +12,9 @@ export type Limits = {
   lo : number,
   hi : number
 };
+export function fit(value: number, min: number, max: number) {
+  return value > max ? max : value < min ? min : value;
+}
 // Render the svg <path> element 
 // I:  - points (array): points coordinates
 //     - command (function)
