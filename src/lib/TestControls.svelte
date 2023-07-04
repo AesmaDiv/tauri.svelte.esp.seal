@@ -1,8 +1,8 @@
 <script lang="ts">
   import TextBox from "./Components/TextBox.svelte";
   import { NotifierKind, showMessage } from "./Notifier/notifier";
-  import { ADAM_DATA } from "../stores/equipment";
-  import { TEST_STATE, updatePoints, resetPoints, switchTest } from "../stores/testing";
+  import { SENSORS } from "../stores/equipment";
+  import { TEST_STATE, savePoints, resetPoints, switchTest } from "../stores/testing";
   import { TestStates } from "../shared/types";
   import Button from "./Components/Button.svelte";
 
@@ -30,7 +30,7 @@
     ({
       start: () => startStop(),
       reset: () => resetPoints(test_state),
-      save:  () => updatePoints(test_state),
+      save:  () => savePoints(test_state),
     })[command]();
   }
   $: [btn_start_class, btn_start_value] = $TEST_STATE === test_state ?
@@ -42,9 +42,10 @@
   <div class="info">
     {#each fields as item, i}
       <TextBox name={item.name} title={item.label}
-      value={toTextBox(i, $ADAM_DATA[item.name], item.fixed) || 0 }/>
+      value={toTextBox(i, $SENSORS[item.name], item.fixed) || 0 }/>
     {/each}
   </div>
+  <slot/>
   <div class="buttons">
     <Button class={btn_start_class} onClick={() => onClick('start')}>{btn_start_value}</Button>
     <Button class="reset" onClick={() => onClick('reset')}>сброс</Button>

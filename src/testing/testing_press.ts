@@ -1,29 +1,59 @@
 import { get } from "svelte/store";
+import { type Sensors, TestStates, } from "../shared/types";
 import { SETTINGS } from "../stores/settings";
-import { ADAM_DATA, } from "../stores/equipment";
-import { POINTS_PRESS } from "../stores/testing";
-import type { Sensors, ITiming, } from "../shared/types";
+import { TEST_STATE, POINTS_PRESS, resetPoints, updateTestPoints } from "../stores/testing";
 import { NotifierKind, showMessage } from "../lib/Notifier/notifier";
 
 
-export function doTest() {
-  const timings : ITiming = get(SETTINGS).test.test_press;
-  const max = timings.points_count;
-  const rate = timings.pulling_rate;
-  const result = updatePoints(max, rate);
-  if (!result) showMessage("Испытание закончено", NotifierKind.SUCCESS);
-  return result;
-}
-function updatePoints(max: number, rate: number) : boolean {
-  let test_time = 0;
-  ADAM_DATA.update(data => {
-    data.time += rate / 1000;
-    test_time = +(data.time).toFixed(2);
-    if (Number.isInteger(test_time)) addPoint(data);
-
-    return data;
+let test_tick = 0;
+let test_timer : NodeJS.Timer;
+const NAME = TestStates.PRESS;
+export function switchTest() {
+  // изменить состояние испытания
+  let state = false;
+  TEST_STATE.update(prev => {
+    // получить состояние испытания
+    state = prev === TestStates.IDLE;
+    // изменить состояние испытания
+    return prev === NAME ? TestStates.IDLE : NAME;
   });
-  return test_time < max;
+  // если это начало ->
+  if (state) {
+    resetPoints(NAME);
+    // сброс счётчика и старт таймера
+    test_tick = 0;
+    test_timer = setInterval(() => {
+      !doTest() && switchTest();
+    }, get(SETTINGS).test.test_press.pulling_rate);
+  // если это окончание ->
+  } else {
+    // сброс и уничтожение таймера
+    clearTimeout(test_timer);
+    test_timer = undefined;
+  }
+}
+function doTest() {
+  let result = true;
+  switch (true) {
+    // case (test_tick === 0):
+    //   console.log("Step 0");
+    //   break;
+    // case (test_tick < 20):
+    //   console.log("Waiting", test_tick);
+    //   break;
+    // case (test_tick === 2):
+    //   console.log("Step 2");
+    //   break;
+    case (test_tick < 3000):
+      result = updateTestPoints(NAME, addPoint);
+      if (!result) showMessage("Испытание закончено", NotifierKind.SUCCESS);
+      break;
+    case (test_tick === 3000):
+      result = false;
+  }
+  test_tick += 1;
+
+  return result;
 }
 
 function addPoint(data: Sensors) {

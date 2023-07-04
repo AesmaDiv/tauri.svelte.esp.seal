@@ -74,7 +74,7 @@ function _createPressPoints(press_data, length, from_raw = false ) {
   let result = [];
   let coef = from_raw ? 0.070307 : 1;
   length = Math.min(length, press_data.press_top.length, press_data.press_btm.length);
-  for(let i = 0; i < length; i++) {
+  for (let i = 0; i < length; i++) {
     result.push({
       time: i,
       press_top: Math.max(0, press_data.press_top[i] * coef),

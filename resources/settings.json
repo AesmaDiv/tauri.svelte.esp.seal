@@ -1,91 +1,97 @@
 {
   "adam": {
-    "ip": "192.168.1.100",
-    "pulling_rate": 505,
+    "ip": "127.0.0.1",
+    "pulling_rate": 500,
     "digital": {
       "lamp": {
         "slot": 1,
-        "channel": 101
+        "channel": 0
       },
-      "engine": {
+      "engine_r": {
         "slot": 1,
         "channel": 1
       },
-      "thrust": {
+      "engine_l": {
         "slot": 1,
         "channel": 2
       },
-      "valve": {
+      "thrust": {
         "slot": 1,
         "channel": 3
       },
-      "alarm": {
+      "valve": {
         "slot": 1,
         "channel": 4
+      },
+      "alarm": {
+        "slot": 1,
+        "channel": 5
       }
     },
     "analog": {
       "press_sys": {
         "slot": 0,
-        "channel": 1,
-        "d_range": 65535,
-        "offset": 0,
-        "v_range": 10,
-        "coeff": 1.1
-      },
-      "press_top": {
-        "slot": 0,
         "channel": 3,
         "d_range": 65535,
         "offset": 0,
-        "v_range": 10,
-        "coeff": 2.1
+        "v_range": 61.182,
+        "coeff": 1
+      },
+      "press_top": {
+        "slot": 0,
+        "channel": 1,
+        "d_range": 65535,
+        "offset": 0,
+        "v_range": 6.1183,
+        "coeff": 1.17
       },
       "press_btm": {
         "slot": 0,
         "channel": 2,
         "d_range": 65535,
         "offset": 0,
-        "v_range": 10,
-        "coeff": 2.2
+        "v_range": 6.1183,
+        "coeff": 1.21
       },
       "torque": {
-        "slot": 0,
-        "channel": 5,
-        "d_range": 65535,
-        "offset": 0,
-        "v_range": 10,
-        "coeff": 5.5
-      },
-      "temper": {
-        "slot": 0,
-        "channel": 6,
-        "d_range": 65535,
-        "offset": 0,
-        "v_range": 10,
-        "coeff": 6.6
-      },
-      "speed": {
         "slot": 0,
         "channel": 4,
         "d_range": 65535,
         "offset": 0,
-        "v_range": 10,
-        "coeff": 4.4
+        "v_range": 50,
+        "coeff": 0.75
+      },
+      "temper": {
+        "slot": 4,
+        "channel": 6,
+        "d_range": 65535,
+        "offset": 0,
+        "v_range": 1370,
+        "coeff": 1
+      },
+      "speed": {
+        "slot": 1,
+        "channel": 0,
+        "d_range": 65535,
+        "offset": 0,
+        "v_range": 65535,
+        "coeff": 1
       }
     }
   },
-  "db_path": "F:\\Work\\Когалым\\Гидрозащита\\KogalymSeal.db",
+  "db": {
+    "path": "D:\\Projects\\Tauri\\tauri.svelte.esp.seal\\resources\\seal.sqlite"
+  },
   "test": {
     "test_press": {
-      "duration": 180,
+      "duration": 360,
       "pulling_rate": 100,
       "points_count": 180
     },
     "test_power": {
       "duration": 1500,
       "pulling_rate": 1000,
-      "points_count": 10
+      "points_count": 1500
     }
   }
 }

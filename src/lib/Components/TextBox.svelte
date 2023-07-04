@@ -49,16 +49,16 @@
   <div bind:this={decor} class="decor {not_empty ? '' : 'downed'}" on:mouseleave={onFocus} on:mouseenter={onFocus}>
     <label bind:this={label} for="input" class="{not_empty ? 'lifted' : 'downed'}">{title}</label>
     {#if $$props.select}
-      <select name={$$props.name} bind:this={select} class="input" bind:value={value} on:change={onChange}>
+      <select on:click bind:value={value} name={$$props.name} bind:this={select} class="input" on:change={onChange}>
         <option selected value></option>
         {#each $$props?.options as option}
           <option class="input" value={option[$$props.optionValue]}>{option[$$props?.optionKey]}</option>
         {/each}
       </select>
     {:else if $$props.lines}
-      <textarea name={$$props.name} bind:this={textarea} rows={$$props.lines} bind:value={value}/>
+      <textarea on:click bind:this={textarea} name={$$props.name} rows={$$props.lines} bind:value={value}/>
     {:else}
-      <input readonly={$$props.readonly} name={$$props.name} bind:this={input} class="input" bind:value={value}>
+      <input on:click bind:this={input} name={$$props.name} readonly={$$props.readonly} class="input" bind:value={value}>
     {/if}
   </div>
 </div>

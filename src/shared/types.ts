@@ -19,16 +19,25 @@ export interface IMarkerPower {
 };
 /** Структура данный с ADAM */
 export interface IAdamData {
-  analog: IAnalog,
   digital: IDigital,
+  analog: IAnalog,
+}
+/** Структура дискретных канало ADAM */
+export interface IDigital {
+  slot: Array<number>
 }
 /** Структура аналоговых каналов ADAM */
 export interface IAnalog {
   slot: Array<[number, number, number, number, number, number, number, number]>,
 }
-/** Структура дискретных канало ADAM */
-export interface IDigital {
-  slot: Array<number>
+/** Класс дискретных состояний */
+export class DigitalStates {
+  lamp     : boolean;
+  engine_r : boolean;
+  engine_l : boolean;
+  thrust   : boolean;
+  valve    : boolean;
+  alarm    : boolean;
 }
 /** Класс данных с датчиков */
 export class Sensors {
@@ -59,6 +68,7 @@ export class SensorsBuffers {
     this.temper    = new VBuffer(size);
   }
 };
+
 /** Тип точки для испытания давления диафрагм */
 export type PressPoint = {
   /** время */
@@ -101,7 +111,8 @@ export interface ISettings {
     pulling_rate: number,
     digital: {
       lamp:   IAdamSource,
-      engine: IAdamSource,
+      engine_r: IAdamSource,
+      engine_l: IAdamSource,
       thrust: IAdamSource,
       valve:  IAdamSource,
       alarm:  IAdamSource,

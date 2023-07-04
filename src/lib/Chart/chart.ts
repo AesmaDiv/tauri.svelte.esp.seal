@@ -7,6 +7,7 @@ export type AxisInfo = {
   maximum : number,
   ticks   : number,
   round?  : number,
+  coef?   : number,
 };
 export type Limits = {
   lo : number,

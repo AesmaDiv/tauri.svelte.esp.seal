@@ -19,7 +19,8 @@ let db_path = "";
 SETTINGS.subscribe(async (settings) => {
   // при изменении настроек ->
   // перечитать типы и список тестов
-  if (db_path = settings['db_path']) {
+  console.log(settings);
+  if (db_path = settings.db?.path) {
     await readSealtypes();
     await readTestList({select_first: true});
   }
@@ -102,6 +103,7 @@ export function resetRecord() {
 };
 /** Обновление пределов давления диафрагм */
 function updateLimitsPress(sealtype) {
+  if (!sealtype) return;
   let press_top = sealtype['limit_top']?.split(";").map(parseFloat);
   let press_btm = sealtype['limit_btm']?.split(";").map(parseFloat);
   let limit_top = press_top && { lo: press_top[0], hi: press_top[1] }

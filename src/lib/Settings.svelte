@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { open } from "@tauri-apps/api/dialog";
   import TextBox from "./Components/TextBox.svelte";
   import { TEST, ANALOG, DIGITAL } from "../configs/cfg_menu";
   // import { $SETTINGS } from "../configs/cfg_application";
@@ -6,6 +7,22 @@
   import { SETTINGS } from "../stores/settings";
 
   const db_style = "grid-column-start: 1; grid-column-end: 3;";
+
+  async function onClick(event) {
+    open({
+      multiple: false,
+      filters: [{
+        name: "Sqlite DB",
+        extensions: ['db', 'sqlite']
+      }]
+    }).then(value => {
+      SETTINGS.update(settings => {
+        settings.db.path = Array.isArray(value) ? value[0] : value;
+        console.log(settings);
+        return settings;
+      })
+    });
+  }
 </script>
 
 <form id="settings-form">
@@ -14,7 +31,7 @@
     <div class="textboxes">
       <TextBox name="adam.ip" title="Adam IP" value={extract($SETTINGS, "adam.ip")}/>
       <TextBox name="adam.pulling_rate" title="Частота опроса, мс" value={extract($SETTINGS, "adam.pulling_rate")}/>
-      <TextBox name="db_path" title="Путь к базе данных" value={extract($SETTINGS, "db_path")} style={db_style}/>
+      <TextBox name="db.path" title="Путь к базе данных" value={extract($SETTINGS, "db.path")} style={db_style} on:click={onClick}/>
     </div>
     <!-- ПАРАМЕТРЫ ИСПЫТАНИЙ -->
     <table class="table-test">

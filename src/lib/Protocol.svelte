@@ -1,7 +1,6 @@
 <script lang="ts">
   import { RECORD, CURRENT_SEALTYPE, POINTS_POWER, POINTS_PRESS, LIMITS_PRESS } from "../stores/database";
-  import { AXIES as press_axies } from "../configs/cfg_press";
-  import { AXIES as power_axies, POINTS_MAX } from "../configs/cfg_power";
+  import { AXIS_PRESS, AXIS_POWER } from "../stores/testing";
 
   import { HEADERS_PROTOCOL, HEADERS_CHARTS, COMBOS, transliterate } from "../configs/cfg_localization";
   import { roundValue, decimal2time } from "../shared/funcs";
@@ -162,8 +161,8 @@
       <p>{headers.title_result}</p>
       <hr/>
       <div class="test_charts">
-        <TestChart titles={chart_titles.power} axies={power_axies} points={$POINTS_POWER} names={power_names}/>
-        <TestChart titles={chart_titles.press} axies={press_axies} limits={$LIMITS_PRESS} points={$POINTS_PRESS} names={press_names}/>
+        <TestChart titles={chart_titles.power} axies={$AXIS_POWER} points={$POINTS_POWER} names={power_names}/>
+        <TestChart titles={chart_titles.press} axies={$AXIS_PRESS} limits={$LIMITS_PRESS} points={$POINTS_PRESS} names={press_names}/>
       </div>
       <div class="test_table">
         <!-- {@html buildPointsTable(points, headers)} -->

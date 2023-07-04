@@ -51,7 +51,7 @@
       <g class="x">
         {#each Array(axis_x.ticks + 1) as _, div}
           {@const x = pix_x * div}
-          {@const v = val_x * div}
+          {@const v = val_x * div * (axis_x.coef ?? 1)}
           <line x1={x} x2={x} y1={0} y2={height}></line>
           <text x={x} y={height}>{axis_x.round ? v.toFixed(axis_x.round) : v}</text>
         {/each}
@@ -60,7 +60,7 @@
       <g class="y">
         {#each Array(axis_y.ticks + 1) as _, div}
           {@const y = height - pix_y * div}
-          {@const v = val_y * div}
+          {@const v = val_y * div * (axis_y.coef ?? 1)}
           <line x1={0} x2={width} y1={y} y2={y}></line>
           <text y={y} dominant-baseline="middle">{axis_y.round ? v.toFixed(axis_y.round) : v}</text>
         {/each}
@@ -80,7 +80,7 @@
       {/if}
       <!-- marker -->
       {#if marker }
-        {@const mx = fit(marker.x, axis_x.minimum, axis_y.maximum) * coefs.x}
+        {@const mx = fit(marker.x, axis_x.minimum, axis_x.maximum) * coefs.x}
         {@const my = height - fit(marker.y, axis_y.minimum, axis_y.maximum) * coefs.y}
         <path transform="translate(0,{my})" d="M 0,0 l -5,5 v -10 z"/>
         <path transform="translate({mx},{height})" d="M 0,0 l 5,5 h -10 z"/>

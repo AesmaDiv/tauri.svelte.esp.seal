@@ -25,7 +25,7 @@ export async function readSettings() {
 export async function saveSettings(form: FormData, refresh: boolean = false) {
   let settings = {};
   form.forEach((v, k) => {
-    const value = ["adam.ip", "db_path"].includes(k) ? v.toString() : to_number(v);
+    const value = ["adam.ip", "db.path"].includes(k) ? v.toString() : to_number(v);
     assign(settings, k.split("."), value)
   });
   writeTextFile(SETTINGS_PATH, JSON.stringify(settings, null, 2))

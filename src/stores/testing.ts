@@ -2,12 +2,15 @@ import { ask } from "@tauri-apps/api/dialog";
 import { type Writable, writable, get } from "svelte/store";
 import { SETTINGS } from "./settings";
 import { updatePoints as updateDbPoints} from "./database";
-import { ADAM_DATA, ADAM_READING } from "./equipment";
-import type { IMarkerPower, IMarkerPress, PowerPoint, PressPoint, ITiming, ISettings } from "../shared/types";
+import { SENSORS, ADAM_READING } from "./equipment";
+import type { IMarkerPower, IMarkerPress, PowerPoint, PressPoint, ITiming } from "../shared/types";
 import { TestStates } from "../shared/types";
-import { doTest as doPressTest } from "../testing/testing_press";
-import { doTest as doPowerTest } from "../testing/testing_power";
+import type { AxisInfo } from "../lib/Chart/chart";
 import { showMessage, NotifierKind } from "../lib/Notifier/notifier";
+import { switchTest as switchPressTest } from "../testing/testing_press";
+import { switchTest as switchPowerTest } from "../testing/testing_power";
+import { AXIES as AXIES_PRESS_INIT } from "../configs/cfg_press";
+import { AXIES as AXIES_POWER_INIT } from "../configs/cfg_power";
 
 
 /** Текущее испытание */
@@ -20,6 +23,10 @@ export let MARKER_POWER: Writable<{}> = writable({} as IMarkerPower);
 export let POINTS_PRESS: Writable<PressPoint[]> = writable(undefined);
 /** Точки графиков измерения потребляемой мощности c ADAM */
 export let POINTS_POWER: Writable<PowerPoint[]> = writable(undefined);
+/** Параметры осей графика давления диафрагм */
+export let AXIS_PRESS: Writable<{[name: string]: AxisInfo}> = writable(AXIES_PRESS_INIT);
+/** Параметры осей графика потребляемой мощности */
+export let AXIS_POWER: Writable<{[name: string]: AxisInfo}> = writable(AXIES_POWER_INIT);
 
 
 /** Проверка состояния испытания */
@@ -54,15 +61,15 @@ export function resetPoints(test_state: TestStates = TestStates.IDLE) {
   };
   console.log("Очистка точек испытания %o", test_state)
   // сброс значения пройденого времени испытания
-  ADAM_DATA.update(data => { data.time = 0; return data });
+  SENSORS.update(data => { data.time = 0; return data });
   let points = ({
     [TestStates.PRESS]: POINTS_PRESS,
     [TestStates.POWER]: POINTS_POWER,
   })[test_state];
   points.set(undefined);
 }
-/** Обновление точек графика испытания в БД */
-export function updatePoints(test_state: TestStates) {
+/** Сохранение точек графика испытания в БД */
+export function savePoints(test_state: TestStates) {
   if (test_state === TestStates.IDLE) return;
   let points = ({
     [TestStates.PRESS]: get(POINTS_PRESS),
@@ -71,8 +78,20 @@ export function updatePoints(test_state: TestStates) {
   updateDbPoints(test_state, points);
   resetPoints(test_state);
 }
+/** Добавление точки испытания  */
+export function updateTestPoints(test_state: TestStates, addFunction: Function) : boolean {
+  const timings : ITiming = get(SETTINGS).test[test_state];
+  let test_time = 0;
+  SENSORS.update(data => {
+    data.time += timings.pulling_rate / 1000;
+    test_time = +(data.time).toFixed(2);
+    if (Number.isInteger(test_time)) addFunction(data);
+
+    return data;
+  });
+  return test_time < timings.points_count;
+}
 /** Переключение состояния испытаний */
-let test_timer : NodeJS.Timer;
 export function switchTest(test_state: TestStates) {
   if (!get(ADAM_READING)) {
     showMessage("Не запущен опрос Adam", NotifierKind.ERROR);
@@ -84,41 +103,20 @@ export function switchTest(test_state: TestStates) {
     showMessage("Выполняется другое испытание", NotifierKind.ERROR);
     return;
   }
-  // изменить состояние испытания
-  let state = false;
-  TEST_STATE.update(prev => {
-    // если не запущено ни одно испытание ->
-    // запускаем указанное
-    state = prev === TestStates.IDLE;
-    return prev === test_state ? TestStates.IDLE : test_state;
-  });
-  // если это начало теста ->
-  // создание и запуск таймера
-  if (state) {
-    resetPoints(test_state);
-    // при вызове функции создания и запуска таймера передаётся колбэк функция,
-    // которая будет вызвана по завершению его работы
-    const timings : ITiming = get(SETTINGS).test[test_state];
-    test_timer = setInterval(() => {
-      !({
-        [TestStates.PRESS] : doPressTest,
-        [TestStates.POWER] : doPowerTest,
-      })[test_state](timings.points_count) && switchTest(test_state);
-    }, timings.pulling_rate);
-  // если это остановка теста ->
-  // остановка и очистка таймера
-  } else if (test_timer) {
-    clearInterval(test_timer);
-    test_timer = undefined;
-  }
+  // запуск/остановка испытания
+  ({
+    [TestStates.PRESS] : switchPressTest,
+    [TestStates.POWER] : switchPowerTest,
+  })[test_state]();
 }
 
+
 // при изменении средних значений с ADAM ->
-ADAM_DATA.subscribe(data => {
+SENSORS.subscribe(data => {
   // изменить маркер времени только для активного испытания
   const test = get(TEST_STATE);
   const press_time = test === TestStates.PRESS ? data.time : 0;
-  const power_time = test === TestStates.POWER ? data.time : 0
+  const power_time = test === TestStates.POWER ? data.time : 0;
   // обновить положение маркеров графиков
   MARKER_PRESS.set({
     press_top: { x: press_time, y: data.press_top},
@@ -129,3 +127,17 @@ ADAM_DATA.subscribe(data => {
     temper: { x: power_time, y: data.temper},
   });
 });
+
+// при изменении настроек ->
+SETTINGS.subscribe(settings => {
+  if (!settings.test) return;
+  // обновить параметры оси времени для графиков испытаний
+  AXIS_PRESS.update(axis => {
+    axis.time = { minimum: 0, maximum: settings.test.test_press.duration, ticks: 6, coef: 1/60 };
+    return axis;
+  });
+  AXIS_POWER.update(axis => {
+    axis.time = { minimum: 0, maximum: settings.test.test_power.duration, ticks: 5, coef: 1/60 };
+    return axis;
+  });
+})
